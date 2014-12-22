@@ -72,6 +72,18 @@ library
       -Wall -fno-warn-name-shadowing
       -threaded
 
+executable kraken
+  main-is: Main.hs
+  hs-source-dirs:
+    driver
+  build-depends:
+      base == 4.*
+    , kraken
+  default-language:
+      Haskell2010
+  ghc-options:
+      -Wall -threaded
+
 test-suite krakenspec
   type:
       exitcode-stdio-1.0

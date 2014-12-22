@@ -15,7 +15,7 @@ import           System.Process
 import           Test.Hspec               hiding (pending)
 import           Test.Hspec.Wai
 
-import           Kraken.Daemon
+import           Kraken.Daemon.Internal
 import           Kraken.Graph
 import           Kraken.Store
 import           Kraken.Web               (application)

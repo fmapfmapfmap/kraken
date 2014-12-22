@@ -19,7 +19,7 @@ import           System.IO.Silently
 import           Test.Hspec
 import           Test.Hspec.Wai
 
-import           Kraken.Daemon
+import           Kraken.Daemon.Internal
 import           Kraken.Graph
 import           Kraken.Run              as Kraken
 import           Kraken.Store

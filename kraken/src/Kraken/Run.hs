@@ -32,7 +32,7 @@ import           Text.Printf              (printf)
 
 import           Kraken.ActionM
 import           Kraken.Config
-import           Kraken.Daemon
+import           Kraken.Daemon.Internal
 import           Kraken.Dot
 import           Kraken.Graph
 import           Kraken.Store

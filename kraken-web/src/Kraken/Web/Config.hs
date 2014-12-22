@@ -16,7 +16,7 @@ import           System.Environment
 import           System.FilePath
 import           System.IO
 
-import           Paths_kraken
+import           Paths_kraken_web
 
 
 data Config = Config {

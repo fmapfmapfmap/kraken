@@ -33,7 +33,6 @@ import           Control.Applicative
 import           Control.Arrow              ((>>>))
 import qualified Control.Exception          as E
 import           Control.Exception.Enclosed (catchAny)
-import           Control.Monad.IO.Class     (MonadIO(..))
 import           Control.Monad.Reader
 import           Control.Monad.State        (StateT, get, put, runStateT)
 import           Control.Monad.Trans.Either

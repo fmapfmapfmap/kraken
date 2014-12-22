@@ -1,4 +1,4 @@
-name:             kraken
+name:             kraken-web
 version:          0.2.0.0
 author:           Sönke Hahn
 maintainer:       soenke.hahn@zalora.com
@@ -36,14 +36,15 @@ library
     , http-client
     , http-types
     , interpolate
+    , kraken
     , mtl
     , optparse-applicative >= 0.11
     , process
     , safe
     , servant
-    , servant-server
-    , servant-docs
     , servant-client
+    , servant-docs
+    , servant-server
     , string-conversions
     , system-filepath
     , text
@@ -60,9 +61,10 @@ library
       Kraken.Web
       Kraken.Web.Config
       Kraken.Web.Utils
+      Paths_kraken_web
       --Kraken.Web.TargetGraph
-      Network.Wai.Handler.Warp.Run
-      Paths_kraken
+      --Network.Wai.Handler.Warp.Run
+      --Paths_kraken
   default-language:
       Haskell2010
   ghc-options:
@@ -111,7 +113,7 @@ library
       ---Wall -fno-warn-name-shadowing
       ---threaded
 
-test-suite krakenspec
+test-suite krakenwebspec
   type:
       exitcode-stdio-1.0
   ghc-options:
@@ -121,56 +123,25 @@ test-suite krakenspec
   default-language:
       Haskell2010
   hs-source-dirs:
-      test, examples
+      test
   main-is:
       Spec.hs
   other-modules:
-    ExampleSpec
-    Spec
-    Test.Hspec.Checkers
-    Kraken.ActionMSpec
-    Kraken.StoreSpec
-    Kraken.WebSpec
-    Kraken.GraphSpec
-    Kraken.Web.ConfigSpec
-    Kraken.DaemonSpec
-    Kraken.DotSpec
-    Kraken.RunSpec
-    Kraken.ConfigSpec
-    KrakenSpec
+      Kraken.WebSpec
+      Kraken.Web.ConfigSpec
   build-depends:
       base == 4.*
     , aeson
-    , checkers
-    , configurator
-    , containers
     , deepseq
     , directory
-    , either
-    , graph-wrapper
     , hspec
-    , hspec-wai >= 0.5
-    , http-client
-    , http-types
-    , HUnit
-    , interpolate
+    , hspec-wai
     , kraken
+    , kraken-web
+    , network
     , process
-    , QuickCheck >= 2.7
-    , quickcheck-instances
-    , safe
-    , servant
-    , servant-server
-    , servant-docs
-    , servant-client
-    , silently
     , string-conversions
+    , servant-client
     , temporary
-    , transformers
-    , wai
     , wai-extra
     , warp
-  if flag(network-uri)
-    build-depends: network-uri >= 2.6, network >= 2.6
-  else
-    build-depends: network-uri < 2.6, network < 2.6

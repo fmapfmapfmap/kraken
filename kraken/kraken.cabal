@@ -12,9 +12,6 @@ cabal-version:    >= 1.10
 extra-source-files:
   default.nix
 
-data-files:
-  static/*.html
-
 flag network-uri
    description: Get Network.URI from the network-uri package
    default: True
@@ -68,7 +65,6 @@ library
       Kraken.Util
       Kraken.TargetGraph
       Network.Wai.Handler.Warp.Run
-      Paths_kraken
   default-language:
       Haskell2010
   ghc-options:

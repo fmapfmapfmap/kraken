@@ -25,12 +25,12 @@ import           System.IO
 import           System.Process                 (CreateProcess (..),
                                                  StdStream (..), createProcess,
                                                  proc, waitForProcess)
-
 import           Kraken.Daemon                  hiding (server)
 import           Kraken.Dot
+import           Kraken.TargetGraph
+
 import           Kraken.Web.Config
 import           Kraken.Web.Utils
-import           Kraken.Web.TargetGraph
 
 run :: IO ()
 run = do

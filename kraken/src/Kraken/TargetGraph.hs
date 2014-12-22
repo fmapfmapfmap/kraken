@@ -6,12 +6,12 @@ module Kraken.TargetGraph where
 
 
 import           Control.Applicative
-import           Data.Aeson
+import           Data.Aeson           (ToJSON(..), FromJSON(..))
 import           Data.Graph.Wrapper
-import           GHC.Generics
+import           GHC.Generics         (Generic)
 import           Servant.Docs
 
-import           Kraken.ActionM
+import           Kraken.ActionM       (TargetName)
 import           Kraken.Graph
 
 

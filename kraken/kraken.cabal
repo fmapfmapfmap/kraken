@@ -67,10 +67,6 @@ library
       Kraken.Store
       Kraken.Util
       Kraken.TargetGraph
-      --Kraken.Web
-      --Kraken.Web.Config
-      --Kraken.Web.Utils
-      --Kraken.Web.TargetGraph
       Network.Wai.Handler.Warp.Run
       Paths_kraken
   default-language:

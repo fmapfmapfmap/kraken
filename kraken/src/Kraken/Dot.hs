@@ -16,9 +16,9 @@ import           Data.Graph.Wrapper      as Graph
 import           Data.List               as List (filter, isPrefixOf, nub,
                                                   sortBy)
 import           Data.Maybe
-import           Data.String.Interpolate
+import           Data.String.Interpolate (i)
 import           Prelude                 hiding (any, concat, elem)
-import           Safe
+import           Safe                    (headNote)
 
 import           Kraken.ActionM
 import qualified Kraken.Graph

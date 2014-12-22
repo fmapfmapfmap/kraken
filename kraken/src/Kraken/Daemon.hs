@@ -10,10 +10,10 @@ module Kraken.Daemon where
 import           Control.Monad.Trans.Either
 import           Control.Monad.IO.Class        (liftIO)
 import           Data.Aeson                    (ToJSON(..), FromJSON(..))
-import           Data.Proxy
-import           GHC.Generics
-import           Network.Wai
-import           Network.Wai.Handler.Warp.Run
+import           Data.Proxy                    (Proxy(..))
+import           GHC.Generics                  (Generic)
+import           Network.Wai                   (Application)
+import           Network.Wai.Handler.Warp.Run  (Port, runWarp)
 import           Servant.API
 import           Servant.Docs
 import           Servant.Server

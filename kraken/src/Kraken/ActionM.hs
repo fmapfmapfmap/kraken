@@ -32,17 +32,17 @@ module Kraken.ActionM (
 import           Control.Applicative
 import           Control.Arrow              ((>>>))
 import qualified Control.Exception          as E
-import           Control.Exception.Enclosed
-import           Control.Monad.IO.Class
+import           Control.Exception.Enclosed (catchAny)
+import           Control.Monad.IO.Class     (MonadIO(..))
 import           Control.Monad.Reader
 import           Control.Monad.State        (StateT, get, put, runStateT)
 import           Control.Monad.Trans.Either
 import           Data.Monoid
-import           Data.String
-import           Data.Typeable
-import           GHC.Generics
+import           Data.String                (IsString)
+import           Data.Typeable              (Typeable, cast)
+import           GHC.Generics               (Generic)
 
-import           Kraken.Util
+import           Kraken.Util                (logMessage, logMessageLn)
 
 
 newtype TargetName = TargetName String

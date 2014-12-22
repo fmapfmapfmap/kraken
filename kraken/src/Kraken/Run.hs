@@ -21,14 +21,14 @@ import           Data.List                as List (null, (\\))
 import           Data.Maybe
 import           Data.Monoid
 import           Data.Set                 as Set (empty, insert, member)
-import           Data.String.Interpolate
-import           Network.Wai.Handler.Warp hiding (cancel)
+import           Data.String.Interpolate  (i)
+import           Network.Wai.Handler.Warp (Port)
 import           Options.Applicative      hiding (action)
 import           Prelude                  hiding (mapM)
-import           Safe
+import           Safe                     (readNote)
 import           System.Exit
 import           System.IO
-import           Text.Printf
+import           Text.Printf              (printf)
 
 import           Kraken.ActionM
 import           Kraken.Config

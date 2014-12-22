@@ -58,6 +58,7 @@ library
       Kraken.ActionM
       Kraken.Config
       Kraken.Daemon
+      Kraken.Daemon.Internal
       Kraken.Dot
       Kraken.Graph
       Kraken.Run
@@ -90,9 +91,7 @@ test-suite krakenspec
     Test.Hspec.Checkers
     Kraken.ActionMSpec
     Kraken.StoreSpec
-    --Kraken.WebSpec
     Kraken.GraphSpec
-    --Kraken.Web.ConfigSpec
     Kraken.DaemonSpec
     Kraken.DotSpec
     Kraken.RunSpec

@@ -2,7 +2,7 @@
              StandaloneDeriving #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module Kraken.Web.TargetGraph where
+module Kraken.TargetGraph where
 
 
 import           Control.Applicative

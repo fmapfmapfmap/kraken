@@ -21,8 +21,7 @@ import           Servant.Server
 import           Kraken.ActionM
 import           Kraken.Graph
 import           Kraken.Store
-import           Kraken.Web.TargetGraph
-import           Kraken.Web.Utils
+import           Kraken.TargetGraph
 
 
 -- * API definition
@@ -30,7 +29,7 @@ import           Kraken.Web.Utils
 type DaemonApi =
        "targetGraph" :> Get TargetGraph
   :<|> Get ()
-  :<|> "docs" :> Raw
+  :<|> "docs" :> Get Documentation
   :<|> "target" :> Capture "target-name" String :> "monitor" :> "status" :> Get MonitorStatus
 
 daemonApi :: Proxy DaemonApi
@@ -49,7 +48,7 @@ server :: Store -> Server DaemonApi
 server store =
            return (toTargetGraph $ graph store)
       :<|> left (404, "not found")
-      :<|> serveDocumentation daemonApi
+      :<|> serveDocs daemonApi
       :<|> runTargetMonitor store
 
 -- * Endpoint implementations
@@ -69,8 +68,12 @@ runTargetMonitor store targetName = do
         Left err -> left (404, show err)
 
 
+serveDocs :: HasDocs layout => Proxy layout -> EitherT (Int, String) IO Documentation
+serveDocs = undefined
 
 -- * API-related types
+
+type ServantResponse a = EitherT (Int, String) IO a
 
 data MonitorStatus =
     MonitorStatus { status :: Status
@@ -93,4 +96,13 @@ data Status = OK
 
 instance ToJSON Status
 instance FromJSON Status
+
+newtype Documentation = Documentation String
+    deriving (Show, Eq, Generic)
+
+instance ToJSON Documentation
+instance FromJSON Documentation
+
+instance ToSample Documentation where
+  toSample = return $ Documentation "Some documentation"
 

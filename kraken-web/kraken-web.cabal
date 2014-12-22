@@ -57,19 +57,10 @@ library
   else
     build-depends: network-uri < 2.6, network < 2.6
   exposed-modules:
-      Kraken
-      Kraken.ActionM
-      Kraken.Config
-      Kraken.Daemon
-      Kraken.Dot
-      Kraken.Graph
-      Kraken.Run
-      Kraken.Store
-      Kraken.Util
       Kraken.Web
       Kraken.Web.Config
       Kraken.Web.Utils
-      Kraken.Web.TargetGraph
+      --Kraken.Web.TargetGraph
       Network.Wai.Handler.Warp.Run
       Paths_kraken
   default-language:
@@ -78,47 +69,47 @@ library
       -Wall -fno-warn-name-shadowing
       -threaded
 
-executable kraken-web
-  main-is: Kraken/Web/Main.hs
-  hs-source-dirs:
-    src
-  build-depends:
-      base
-    , aeson
-    , bytestring
-    , containers
-    , directory
-    , either
-    , enclosed-exceptions
-    , filepath
-    , graph-wrapper
-    , http-client
-    , http-types
-    , interpolate
-    , mtl
-    , optparse-applicative >= 0.11
-    , process
-    , safe
-    , servant
-    , servant-server
-    , servant-docs
-    , servant-client
-    , string-conversions
-    , system-filepath
-    , transformers
-    , wai
-    , wai-app-static
-    , warp
-    , yaml
-  if flag(network-uri)
-    build-depends: network-uri >= 2.6, network >= 2.6
-  else
-    build-depends: network-uri < 2.6, network < 2.6
-  default-language:
-      Haskell2010
-  ghc-options:
-      -Wall -fno-warn-name-shadowing
-      -threaded
+--executable kraken-web
+  --main-is: Kraken/Web/Main.hs
+  --hs-source-dirs:
+    --src
+  --build-depends:
+      --base
+    --, aeson
+    --, bytestring
+    --, containers
+    --, directory
+    --, either
+    --, enclosed-exceptions
+    --, filepath
+    --, graph-wrapper
+    --, http-client
+    --, http-types
+    --, interpolate
+    --, mtl
+    --, optparse-applicative >= 0.11
+    --, process
+    --, safe
+    --, servant
+    --, servant-server
+    --, servant-docs
+    --, servant-client
+    --, string-conversions
+    --, system-filepath
+    --, transformers
+    --, wai
+    --, wai-app-static
+    --, warp
+    --, yaml
+  --if flag(network-uri)
+    --build-depends: network-uri >= 2.6, network >= 2.6
+  --else
+    --build-depends: network-uri < 2.6, network < 2.6
+  --default-language:
+      --Haskell2010
+  --ghc-options:
+      ---Wall -fno-warn-name-shadowing
+      ---threaded
 
 test-suite krakenspec
   type:

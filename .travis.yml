@@ -9,5 +9,6 @@ install:
 
 before_script:
   - cabal sandbox init
-  - cabal sandbox add-source ./servant/servant
+  - (cd kraken && cabal sandbox --sandbox=../.cabal-sandbox init && cabal install --enable-tests && cabal test)
+  - (cd kraken-web && cabal sandbox --sandbox=../.cabal-sandbox init && cabal install --enable-tests --only-dependencies)
   - cabal install --only-dependencies --enable-tests

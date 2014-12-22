@@ -1,4 +1,7 @@
-{-# LANGUAGE DataKinds, OverloadedStrings, TypeOperators #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeOperators #-}
 
 module Kraken.Web where
 
@@ -8,6 +11,7 @@ import           Control.Arrow
 import           Control.Exception
 import           Control.Monad                  (when)
 import           Control.Monad.Trans.Either     hiding (left)
+import           Data.Aeson                     (FromJSON(..), ToJSON(..))
 import           Data.ByteString                (ByteString, hGetContents)
 import           Data.Either                    (lefts, rights)
 import           Data.Graph.Wrapper
@@ -15,22 +19,24 @@ import           Data.Maybe
 import           Data.List                      (intercalate)
 import           Data.Proxy
 import           Data.String.Conversions
+import           GHC.Generics                   (Generic)
 import           Network.HTTP.Types
 import           Network.Wai                    as Wai
 import           Network.Wai.Handler.Warp.Run
 import           Servant
 import           Servant.Client
+import           Servant.Docs
 import           System.Exit
 import           System.IO
 import           System.Process                 (CreateProcess (..),
                                                  StdStream (..), createProcess,
                                                  proc, waitForProcess)
-import           Kraken.Daemon                  hiding (server)
+import qualified Kraken.Daemon                  as Daemon
 import           Kraken.Dot
 import           Kraken.TargetGraph
 
 import           Kraken.Web.Config
-import           Kraken.Web.Utils
+
 
 run :: IO ()
 run = do
@@ -43,10 +49,13 @@ application documentRoot krakenUris =
   serve webApi $
   server documentRoot krakenUris
 
+-- * API
+
+
 type WebApi =
        "targetGraph.pdf" :> Raw
   :<|> "targetGraph.dot" :> Raw
-  :<|> "docs" :> Raw
+  :<|> "docs" :> Get Documentation
   :<|> Raw
 
 webApi :: Proxy WebApi
@@ -56,12 +65,28 @@ server :: FilePath -> [BaseUrl] -> Server WebApi
 server documentRoot krakenUris =
        targetGraph krakenUris Pdf
   :<|> targetGraph krakenUris Dot
-  :<|> serveDocumentation webApi
+  :<|> serveDocs webApi
   :<|> serveDirectory documentRoot
 
 data FileFormat
   = Dot
   | Pdf
+
+type ServantResponse a = EitherT (Int, String) IO a
+
+serveDocs :: HasDocs layout => Proxy layout -> ServantResponse Documentation
+serveDocs api = return . Documentation $ cs . markdown $ docs api
+
+newtype Documentation = Documentation String
+    deriving (Show, Eq, Generic)
+
+instance ToJSON Documentation
+instance FromJSON Documentation
+
+instance ToSample Documentation where
+  toSample = return $ Documentation "Some documentation"
+
+-- * Graphs
 
 targetGraph :: [BaseUrl] -> FileFormat -> Application
 targetGraph krakenUris fileFormat request respond = do
@@ -105,7 +130,7 @@ toDot prefixes (TargetGraph g) = Kraken.Dot.toDot False prefixes True (fmap Krak
 getTargetGraph :: BaseUrl -> EitherT String IO TargetGraph
 (     getTargetGraph
  :<|> _)
-    = client daemonApi
+    = client Daemon.daemonApi
 
 
 -- * utils

@@ -51,7 +51,6 @@ application documentRoot krakenUris =
 
 -- * API
 
-
 type WebApi =
        "targetGraph.pdf" :> Raw
   :<|> "targetGraph.dot" :> Raw

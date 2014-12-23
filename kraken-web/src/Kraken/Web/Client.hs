@@ -9,11 +9,10 @@ import Kraken.Web
 -- @FilePath@.
 mkJqueryBindings :: FilePath -> IO ()
 mkJqueryBindings lib = do
-   let pdfTargetGraph :<|> dotTargetGraph :<|> docs :<|> documents = jquery webApi
-   let intro = " This file was auto-generated - changes will be overwritten!"
+   let pdfTargetGraph :<|> dotTargetGraph :<|> docs :<|> _ = jquery webApi
+   let intro = "// This file was auto-generated - changes will be overwritten!"
    writeFile lib $ intro ++ concatMap generateJS [ pdfTargetGraph "GET"
                                                  , dotTargetGraph "GET"
                                                  , docs
-                                                 , documents "GET"
                                                  ]
 

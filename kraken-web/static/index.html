@@ -13,10 +13,64 @@
     <script src="js/vendor/jquery-2.1.3.min.js"></script>
     <script src="js/vendor/graphlib-dot.min.js"></script>
     <script src="js/vendor/dagre-d3.min.js"></script>
+    <script src="js/kraken-web-client.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <style>
+
+svg {
+  border: 1px solid #999;
+  overflow: hidden;
+}
+
+.node {
+  white-space: nowrap;
+}
+
+.node rect,
+.node cicrce,
+.node ellipse {
+  stroke: #333;
+  fill: #fff;
+  stroke-width: 1.5px;
+}
+
+.cluster rect {
+  stroke: #333;
+  fill: #000;
+  fill-opacity: 0.1;
+  stroke-width: 1.5px;
+}
+
+.edgePath path.path {
+  stroke: #333;
+  stroke-width: 1.5px;
+  fill: none;
+}
+    </style>
   </head>
   <body>
 <h1>kraken-web</h2>
 
+<svg id="graphContainer">
+    <g/>
+</svg>
 <a href="/targetGraph.pdf">target graph as pdf</a>
+
 </body>
+
+<script>
+var renderer = new dagreD3.render();
+
+var buildGraph = function(dotData) {
+    var re = /\[.*\]/g;
+    var cleanedUp = dotData.replace(re, "");
+    console.log(dotData);
+    console.log(cleanedUp);
+    var dotDigraph = graphlibDot.read(cleanedUp);
+    d3.select("svg g").call(renderer, dotDigraph);
+};
+
+
+targetGraph_dot(buildGraph, function() { console.log("Error fetching dot file"); })
+</script>
 </html>

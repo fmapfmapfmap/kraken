@@ -84,6 +84,23 @@ executable kraken
   ghc-options:
       -Wall -threaded
 
+executable example
+  main-is: Main.hs
+  other-modules:
+      Example
+  hs-source-dirs:
+      examples
+  build-depends:
+      base == 4.*
+    , kraken
+    , directory
+    , transformers
+  default-language:
+      Haskell2010
+  ghc-options:
+      -Wall -threaded
+
+
 test-suite krakenspec
   type:
       exitcode-stdio-1.0

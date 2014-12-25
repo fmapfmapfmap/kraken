@@ -116,3 +116,11 @@ spec =
           response <- get "/"
           liftIO $ (cs (simpleBody response)
             `shouldSatisfy` (("targetGraph.pdf" :: String) `isInfixOf`))
+
+      context "/targets/<target-name>/run" $ do
+        it "runs the corresponding target" $ do
+          response <- get "/targets/target.1/run"
+          let status = decode response :: Maybe MonitorStatus
+          status `shouldSatisfy` isRight
+          return response `shouldRespondWith` 200
+

@@ -5,7 +5,9 @@ module Kraken.WebSpec where
 
 import           Control.Concurrent
 import           Control.Exception
+import           Data.Aeson               (decode)
 import           Data.List
+import           Data.Maybe               (isJust)
 import           Data.String.Conversions
 import           Network.Socket
 import           Network.Wai.Handler.Warp as Warp
@@ -120,7 +122,7 @@ spec =
       context "/targets/<target-name>/run" $ do
         it "runs the corresponding target" $ do
           response <- get "/targets/target.1/run"
-          let status = decode response :: Maybe MonitorStatus
-          status `shouldSatisfy` isRight
+          let status = decode $ simpleBody response :: Maybe MonitorStatus
+          liftIO $ status `shouldSatisfy` isJust
           return response `shouldRespondWith` 200
 

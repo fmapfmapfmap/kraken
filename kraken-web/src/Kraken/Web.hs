@@ -10,6 +10,7 @@ import           Control.Applicative
 import           Control.Arrow
 import           Control.Exception
 import           Control.Monad                  (when)
+import           Control.Monad.IO.Class         (liftIO)
 import           Control.Monad.Trans.Either     hiding (left)
 import           Data.Aeson                     (FromJSON(..), ToJSON(..))
 import           Data.ByteString                (ByteString, hGetContents)
@@ -31,7 +32,7 @@ import           System.IO
 import           System.Process                 (CreateProcess (..),
                                                  StdStream (..), createProcess,
                                                  proc, waitForProcess)
-import qualified Kraken.Daemon                  as Daemon
+import           Kraken.Daemon                  hiding (Documentation)
 import           Kraken.Dot
 import           Kraken.TargetGraph
 
@@ -54,6 +55,8 @@ application documentRoot krakenUris =
 type WebApi =
        "targetGraph.pdf" :> Raw
   :<|> "targetGraph.dot" :> Raw
+  :<|> "target" :> Capture "target-name" String :> "monitor" :> "run"
+                :> Get MonitorStatus
   :<|> "docs" :> Get Documentation
   :<|> Raw
 
@@ -64,6 +67,7 @@ server :: FilePath -> [BaseUrl] -> Server WebApi
 server documentRoot krakenUris =
        targetGraph krakenUris Pdf
   :<|> targetGraph krakenUris Dot
+  :<|> monitorStatus krakenUris
   :<|> serveDocs webApi
   :<|> serveDirectory documentRoot
 
@@ -84,6 +88,24 @@ instance FromJSON Documentation
 
 instance ToSample Documentation where
   toSample = return $ Documentation "Some documentation"
+
+-- * Monitors
+
+-- | Check each daemon for the status of a particular monitor, until one
+-- responds affirmatively.
+-- TODO: This is inefficient and error-prone. Instead, kraken-web should
+-- maintain sufficient metadata to figure out which daemon to query.
+monitorStatus :: [BaseUrl] -> String -> ServantResponse MonitorStatus
+monitorStatus urls name = shortcircuit urls
+    where
+        shortcircuit :: [BaseUrl] -> ServantResponse MonitorStatus
+        shortcircuit []   = return $ MonitorStatus (Err "No matching monitor found")
+                                                   Nothing
+        shortcircuit (x:xs) = do
+            resp <- liftIO . runEitherT $ getMonitorStatus name x
+            case resp of
+                Left err -> shortcircuit xs
+                Right ms -> if status ms == OK then return ms else shortcircuit xs
 
 -- * Graphs
 
@@ -127,9 +149,12 @@ toDot prefixes (TargetGraph g) = Kraken.Dot.toDot False prefixes True (fmap Krak
 -- * daemon api
 
 getTargetGraph :: BaseUrl -> EitherT String IO TargetGraph
+getMonitorStatus :: String -> BaseUrl -> EitherT String IO MonitorStatus
 (     getTargetGraph
- :<|> _)
-    = client Daemon.daemonApi
+ :<|> _
+ :<|> _
+ :<|> getMonitorStatus)
+    = client daemonApi
 
 
 -- * utils

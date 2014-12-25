@@ -30,7 +30,7 @@ type DaemonApi =
        "targetGraph" :> Get TargetGraph
   :<|> Get ()
   :<|> "docs" :> Get Documentation
-  :<|> "target" :> Capture "target-name" String :> "monitor" :> "status" :> Get MonitorStatus
+  :<|> "target" :> Capture "target-name" String :> "monitor" :> "run" :> Get MonitorStatus
 
 daemonApi :: Proxy DaemonApi
 daemonApi = Proxy

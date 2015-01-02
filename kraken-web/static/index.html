@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -15,31 +15,76 @@
     <script src="js/vendor/dagre-d3.min.js"></script>
     <script src="js/kraken-web-client.js"></script>
     <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-    <link href="css/style.css" rel="stylesheet"/>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <link href="css/style.css" rel="stylesheet"/>
   </head>
   <body>
-<h1>kraken-web</h2>
+  <nav class="navbar">
+      <div class="container-fluid">
+          <div class="navbar-header">
+              <h1>kraken-web</h2>
+          </div>
+          <ul class="nav navbar-nav">
+              <li> <a href="/targetGraph.pdf">PDF</a> </li>
+              <li> <a href="/targetGraph.dot">Dot</a> </li>
+          </ul>
+      </div>
+  </nav>
 
-<svg id="graphContainer">
-    <g/>
-</svg>
-<a href="/targetGraph.pdf">target graph as pdf</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <svg id="graphContainer" class="main-graph">
+                <g/>
+            </svg>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-3">
+            <p class="lead"> The graph above represents the targets, and the connections
+                between targets, of the known kraken daemons.  </p>
+            <p class="lead"> Click on a target to run the monitor associated with that
+                target (if there is one). </p>
+        </div>
+    </div>
+</div>
 
 </body>
 
 <script>
 var renderer = new dagreD3.render();
 
+var attachOnClicks = function(graph) {
+    $.each(graph._nodes, function(k,v) {
+        $(v["elem"]).click(function() {
+            getrunmonitortarget(k, function(ret) {
+                // TODO
+            });
+        });
+    });
+}
+
+var dotDigraph;
+
 var buildGraph = function(dotData) {
+    // Remove dot-things that break dagre
     var re = /\[.*\]/g;
     var cleanedUp = dotData.replace(re, "");
-    console.log(dotData);
-    console.log(cleanedUp);
-    var dotDigraph = graphlibDot.read(cleanedUp);
+    dotDigraph = graphlibDot.read(cleanedUp);
     d3.select("svg g").call(renderer, dotDigraph);
-};
 
+    attachOnClicks(dotDigraph);
+
+    // Center the graph
+    var svgGroup = d3.select("svg g");
+    var xCenterOffset = (600 - dotDigraph.graph().width) / 2;
+    svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+};
 
 targetGraph_dot(buildGraph, function() { console.log("Error fetching dot file"); })
 </script>

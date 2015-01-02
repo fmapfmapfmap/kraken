@@ -19,10 +19,10 @@ function targetGraph_dot(onSuccess, onError)
     });
 }
 
-function getrunmonitortarget(target-name, onSuccess, onError)
+function getrunmonitortarget(targetname, onSuccess, onError)
 {
   $.ajax(
-    { url: '/target/' + encodeURIComponent(target-name) + '/monitor/run'
+    { url: '/target/' + encodeURIComponent(targetname) + '/monitor/run'
     , success: onSuccess
     , error: onError
     , type: 'GET'

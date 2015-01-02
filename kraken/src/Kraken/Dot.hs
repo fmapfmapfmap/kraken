@@ -119,7 +119,7 @@ targetEdges withMonitors graph (name, node) =
             (monitor node)
       else []
   where
-    nodeShape = maybe "oval" (const "box") (monitor node)
+    nodeShape = maybe "ellipse" (const "rect") (monitor node)
     dependencies = successors graph name
 
 mkEdge :: String -> TargetName -> TargetName -> String

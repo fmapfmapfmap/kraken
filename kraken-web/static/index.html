@@ -108,9 +108,8 @@ var dotDigraph;
 
 var buildGraph = function(dotData) {
     // Remove dot-things that break dagre
-    var re = /\[.*\]/g;
-    var cleanedUp = dotData.replace(re, "");
-    dotDigraph = graphlibDot.read(cleanedUp);
+    console.log(dotData);
+    dotDigraph = graphlibDot.read(dotData);
     d3.select("svg g").call(renderer, dotDigraph);
 
     attachOnClicks(dotDigraph);

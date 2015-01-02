@@ -319,9 +319,9 @@ spec = do
               "digraph targets {"
             , "rankdir = RL;"
             , "\"bar\""
-            , "[shape = oval];"
+            , "[shape = ellipse];"
             , "\"foo\""
-            , "[shape = oval];"
+            , "[shape = ellipse];"
             , "\"foo\" -> \"bar\" [color = \"black\"];"
             , "}"
             ]

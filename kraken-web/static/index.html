@@ -11,6 +11,7 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script src="js/vendor/jquery-2.1.3.min.js"></script>
+    <script src="http://fb.me/react-0.12.2.min.js"></script>
     <script src="js/vendor/graphlib-dot.min.js"></script>
     <script src="js/vendor/dagre-d3.min.js"></script>
     <script src="js/kraken-web-client.js"></script>
@@ -54,16 +55,50 @@
     </div>
 </div>
 
+<div class="modal fade" id="monitor-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="monitor-label">Monitor Status</h4>
+      </div>
+      <div class="modal-body">
+          <li>
+            <p id="running-monitor">Running monitor</p>
+            <ul id="monitor-status"></ul>
+            <ul id="monitor-result"></ul>
+          </li>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+</div>
 </body>
 
 <script>
 var renderer = new dagreD3.render();
 
+var modalWait = function() {
+    $("#running-monitor").show();
+    $("#monitor-status").hide();
+    $("#monitor-result").hide();
+    $("#monitor-modal").modal('show');
+}
+
+var modalDone = function(resp) {
+    $("#running-monitor").hide();
+    $("#monitor-status").html(resp["status"]["contents"]).show();
+    $("#monitor-result").html(resp["result"]).show();
+}
+
 var attachOnClicks = function(graph) {
     $.each(graph._nodes, function(k,v) {
         $(v["elem"]).click(function() {
+            modalWait();
             getrunmonitortarget(k, function(ret) {
-                // TODO
+                console.log(ret);
+                modalDone(ret);
             });
         });
     });

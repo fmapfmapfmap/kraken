@@ -119,9 +119,9 @@ spec =
           liftIO $ (cs (simpleBody response)
             `shouldSatisfy` (("targetGraph.pdf" :: String) `isInfixOf`))
 
-      context "/targets/<target-name>/run" $ do
+      context "/target/<target-name>/monitor/run" $ do
         it "runs the corresponding target" $ do
-          response <- get "/targets/target.1/run"
+          response <- get "/target/target.1/monitor/run"
           let status = decode $ simpleBody response :: Maybe MonitorStatus
           liftIO $ status `shouldSatisfy` isJust
           return response `shouldRespondWith` 200

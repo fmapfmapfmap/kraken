@@ -1,4 +1,4 @@
- // This file was auto-generated - changes will be overwritten!
+// This file was auto-generated - changes will be overwritten!
 function targetGraph_pdf(onSuccess, onError)
 {
   $.ajax(
@@ -19,6 +19,16 @@ function targetGraph_dot(onSuccess, onError)
     });
 }
 
+function getrunmonitortarget(target-name, onSuccess, onError)
+{
+  $.ajax(
+    { url: '/target/' + encodeURIComponent(target-name) + '/monitor/run'
+    , success: onSuccess
+    , error: onError
+    , type: 'GET'
+    });
+}
+
 function getdocs(onSuccess, onError)
 {
   $.ajax(
@@ -28,4 +38,3 @@ function getdocs(onSuccess, onError)
     , type: 'GET'
     });
 }
-

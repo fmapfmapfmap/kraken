@@ -3,11 +3,11 @@
 module Kraken.WebSpec where
 
 
+import           Control.Applicative
 import           Control.Concurrent
 import           Control.Exception
 import           Data.Aeson               (decode)
 import           Data.List
-import           Data.Maybe               (isJust)
 import           Data.String.Conversions
 import           Network.Socket
 import           Network.Wai.Handler.Warp as Warp
@@ -33,7 +33,8 @@ store :: Store
 store = createStore $
   Target "target.1" [] (return ()) Nothing :
   Target "internalTarget.2" ["target.1"] (return ()) Nothing :
-  Target "target.3" ["target.1", "internalTarget.2"] (return ()) Nothing :
+  Target "target.3" ["target.1", "internalTarget.2"] (return ()) (Just $
+    Monitor "target.3-monitor" [] $ const $ return ()) :
   []
 
 withKrakenDaemon :: (BaseUrl -> IO a) -> IO a
@@ -121,8 +122,15 @@ spec =
 
       context "/target/<target-name>/monitor/run" $ do
         it "runs the corresponding target" $ do
-          response <- get "/target/target.1/monitor/run"
+          response <- get "/target/target.3/monitor/run"
           let status = decode $ simpleBody response :: Maybe MonitorStatus
-          liftIO $ status `shouldSatisfy` isJust
+          liftIO $ status `shouldBe` (Just $ MonitorStatus OK $ Just "()")
+          return response `shouldRespondWith` 200
+
+        it "returns an error when target has no associated monitor" $ do
+          response <- get "/target/target.1/monitor/run"
+          let mstatus = decode $ simpleBody response :: Maybe MonitorStatus
+          liftIO $ (status <$> mstatus) `shouldBe` (Just $
+               Err "No matching monitor found")
           return response `shouldRespondWith` 200
 
